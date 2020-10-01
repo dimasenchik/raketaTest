@@ -9,6 +9,7 @@ import Foundation
 
 protocol FeedMainViewModelProtocol {
     var fetchOffset: Int { get }
+    var currentPageNumber: Int { get set }
     var fetchedNews: [NewsDomainModel] { get set }
     var availableNews: [NewsDomainModel] { get set }
     var didUpdateData: VoidHandler? { get set }
@@ -22,8 +23,10 @@ final class FeedMainViewModel: FeedMainViewModelProtocol {
     // MARK: - Variables
     
     var fetchOffset: Int {
-        return 5
+        return 25
     }
+    
+    var currentPageNumber: Int = 1
     
     var fetchedNews: [NewsDomainModel] = [] {
         didSet {
@@ -57,11 +60,7 @@ final class FeedMainViewModel: FeedMainViewModelProtocol {
     }
     
     func preFetchNews() {
-        guard availableNews.count != fetchedNews.count else { return }
-        if fetchedNews[safe: availableNews.count + fetchOffset] != nil {
-            availableNews.append(contentsOf: Array(fetchedNews[availableNews.count...(availableNews.count - 1) + fetchOffset]))
-        } else {
-            availableNews.append(contentsOf: Array(fetchedNews[availableNews.count...fetchedNews.count - 1]))
-        }
+        availableNews.append(contentsOf: fetchedNews)
+        currentPageNumber += 1
     }
 }

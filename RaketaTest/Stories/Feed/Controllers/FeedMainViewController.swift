@@ -75,7 +75,7 @@ extension FeedMainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == viewModel.availableNews.count - 1 {
+        if indexPath.row == (viewModel.fetchOffset * viewModel.currentPageNumber) - 1 {
             viewModel.preFetchNews()
         }
     }
